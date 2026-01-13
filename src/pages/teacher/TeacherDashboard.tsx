@@ -67,6 +67,18 @@ export default function TeacherDashboard() {
               Generate Lesson Plan
             </Link>
           </Button>
+          <Button variant="outline" asChild>
+            <Link to="/teacher/feed">
+              <FileText className="h-4 w-4 mr-2" />
+              View Feed
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/teacher/classes">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              My Classes
+            </Link>
+          </Button>
         </div>
 
         {/* Stats */}

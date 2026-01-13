@@ -17,6 +17,8 @@ import TeacherPosts from "./pages/teacher/TeacherPosts";
 import NewPost from "./pages/teacher/NewPost";
 import LessonPlans from "./pages/teacher/LessonPlans";
 import NewLessonPlan from "./pages/teacher/NewLessonPlan";
+import TeacherClasses from "./pages/teacher/TeacherClasses";
+import TeacherFeed from "./pages/teacher/TeacherFeed";
 
 // Parent pages
 import ParentDashboard from "./pages/parent/ParentDashboard";
@@ -28,6 +30,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminPosts from "./pages/admin/AdminPosts";
 import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
+import AdminTeacherVerification from "./pages/admin/AdminTeacherVerification";
+import AdminClasses from "./pages/admin/AdminClasses";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +88,22 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/teacher/classes"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherClasses />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/feed"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherFeed />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Parent Routes */}
             <Route
@@ -117,6 +137,22 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teacher-verification"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminTeacherVerification />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/classes"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminClasses />
                 </ProtectedRoute>
               }
             />
