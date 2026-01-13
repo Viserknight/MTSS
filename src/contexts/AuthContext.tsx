@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 
 type UserRole = "admin" | "teacher" | "parent" | null;
 
@@ -9,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   role: UserRole;
+  isVerified: boolean;
   isLoading: boolean;
   signUp: (email: string, password: string, fullName: string, role: "teacher" | "parent") => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<UserRole>(null);
+  const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }, 0);
         } else {
           setRole(null);
+          setIsVerified(false);
           setIsLoading(false);
         }
       }
@@ -61,19 +63,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data, error } = await supabase
         .from("user_roles")
-        .select("role")
+        .select("role, is_verified")
         .eq("user_id", userId)
         .single();
 
       if (error) {
         console.error("Error fetching role:", error);
         setRole(null);
+        setIsVerified(false);
       } else {
         setRole(data?.role as UserRole);
+        // Admins and parents are always verified, teachers need approval
+        const verified = data?.role === "admin" || data?.role === "parent" || data?.is_verified === true;
+        setIsVerified(verified);
       }
     } catch (err) {
       console.error("Error in fetchUserRole:", err);
       setRole(null);
+      setIsVerified(false);
     } finally {
       setIsLoading(false);
     }
@@ -116,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setSession(null);
     setRole(null);
+    setIsVerified(false);
   };
 
   return (
@@ -124,6 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         session,
         role,
+        isVerified,
         isLoading,
         signUp,
         signIn,
