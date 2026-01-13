@@ -51,12 +51,6 @@ export default function NewPost() {
         variant: "destructive",
       });
     } else {
-      // Log the action
-      await supabase.rpc("log_action", {
-        _action: "created_post",
-        _details: { title: formData.title },
-      });
-
       toast({
         title: "Post created!",
         description: formData.isPublished

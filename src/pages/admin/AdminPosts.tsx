@@ -49,18 +49,24 @@ export default function AdminPosts() {
   const fetchPosts = async () => {
     setIsLoading(true);
 
-    const { data } = await supabase
+    const { data: postsData } = await supabase
       .from("posts")
-      .select(`
-        *,
-        profiles:author_id (full_name, email)
-      `)
+      .select("*")
       .order("created_at", { ascending: false });
 
-    const postsWithAuthors = (data || []).map((post) => ({
+    // Fetch author profiles separately
+    const authorIds = [...new Set((postsData || []).map((p) => p.author_id))];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, email")
+      .in("id", authorIds);
+
+    const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+
+    const postsWithAuthors = (postsData || []).map((post) => ({
       ...post,
-      author_name: post.profiles?.full_name || "Unknown",
-      author_email: post.profiles?.email || "",
+      author_name: profilesMap.get(post.author_id)?.full_name || "Unknown",
+      author_email: profilesMap.get(post.author_id)?.email || "",
     }));
 
     setPosts(postsWithAuthors);

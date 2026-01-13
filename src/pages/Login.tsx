@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,11 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import mtssLogo from "@/assets/mtss-logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, role, signIn, isLoading: authLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -18,27 +20,43 @@ const Login = () => {
     password: "",
   });
 
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && role) {
+      const dashboardPath = role === "admin" ? "/admin" : role === "teacher" ? "/teacher" : "/parent";
+      navigate(dashboardPath, { replace: true });
+    }
+  }, [user, role, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // TODO: Implement actual authentication with Supabase
-    try {
-      // Placeholder for auth logic
+    const { error } = await signIn(formData.email, formData.password);
+
+    if (error) {
       toast({
-        title: "Login functionality coming soon",
-        description: "Authentication will be implemented with Lovable Cloud.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Login failed",
+        description: error.message || "Invalid email or password.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully signed in.",
+      });
     }
+
+    setIsLoading(false);
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -79,12 +97,7 @@ const Login = () => {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input

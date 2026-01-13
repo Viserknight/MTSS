@@ -44,18 +44,24 @@ export default function AdminLessonPlans() {
   const fetchPlans = async () => {
     setIsLoading(true);
 
-    const { data } = await supabase
+    const { data: plansData } = await supabase
       .from("lesson_plans")
-      .select(`
-        *,
-        profiles:teacher_id (full_name, email)
-      `)
+      .select("*")
       .order("created_at", { ascending: false });
 
-    const plansWithTeachers = (data || []).map((plan) => ({
+    // Fetch teacher profiles separately
+    const teacherIds = [...new Set((plansData || []).map((p) => p.teacher_id))];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, email")
+      .in("id", teacherIds);
+
+    const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+
+    const plansWithTeachers = (plansData || []).map((plan) => ({
       ...plan,
-      teacher_name: plan.profiles?.full_name || "Unknown",
-      teacher_email: plan.profiles?.email || "",
+      teacher_name: profilesMap.get(plan.teacher_id)?.full_name || "Unknown",
+      teacher_email: profilesMap.get(plan.teacher_id)?.email || "",
     }));
 
     setPlans(plansWithTeachers);

@@ -157,12 +157,6 @@ Note: This is a placeholder. Connect the AI service for full CAPS-aligned plans.
         variant: "destructive",
       });
     } else {
-      // Log the action
-      await supabase.rpc("log_action", {
-        _action: "created_lesson_plan",
-        _details: { subject: formData.subject, grade: formData.grade, topic: formData.topic },
-      });
-
       toast({
         title: "Saved!",
         description: "Your lesson plan has been saved.",
