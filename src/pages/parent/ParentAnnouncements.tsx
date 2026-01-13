@@ -33,17 +33,28 @@ export default function ParentAnnouncements() {
 
   const fetchPosts = async () => {
     setIsLoading(true);
-    const { data } = await supabase
+    const { data: postsData } = await supabase
       .from("posts")
-      .select(`
-        *,
-        profiles:author_id (full_name)
-      `)
+      .select("*")
       .eq("is_published", true)
       .order("created_at", { ascending: false });
 
-    setPosts(data || []);
-    setFilteredPosts(data || []);
+    // Fetch author profiles separately
+    const authorIds = [...new Set((postsData || []).map((p) => p.author_id))];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name")
+      .in("id", authorIds);
+
+    const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+
+    const postsWithAuthors = (postsData || []).map((post) => ({
+      ...post,
+      author_name: profilesMap.get(post.author_id)?.full_name || "Teacher",
+    }));
+
+    setPosts(postsWithAuthors);
+    setFilteredPosts(postsWithAuthors);
     setIsLoading(false);
   };
 
@@ -107,7 +118,7 @@ export default function ParentAnnouncements() {
                       <CardTitle className="text-xl">{post.title}</CardTitle>
                       <CardDescription className="flex items-center gap-2 mt-1">
                         <User className="h-3 w-3" />
-                        {post.profiles?.full_name || "Teacher"}
+                        {post.author_name}
                       </CardDescription>
                     </div>
                     <Badge variant="outline">

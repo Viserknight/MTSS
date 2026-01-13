@@ -17,17 +17,28 @@ export default function ParentDashboard() {
 
   const fetchPosts = async () => {
     setIsLoading(true);
-    const { data } = await supabase
+    const { data: postsData } = await supabase
       .from("posts")
-      .select(`
-        *,
-        profiles:author_id (full_name)
-      `)
+      .select("*")
       .eq("is_published", true)
       .order("created_at", { ascending: false })
       .limit(10);
 
-    setPosts(data || []);
+    // Fetch author profiles separately
+    const authorIds = [...new Set((postsData || []).map((p) => p.author_id))];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name")
+      .in("id", authorIds);
+
+    const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+
+    const postsWithAuthors = (postsData || []).map((post) => ({
+      ...post,
+      author_name: profilesMap.get(post.author_id)?.full_name || "Teacher",
+    }));
+
+    setPosts(postsWithAuthors);
     setIsLoading(false);
   };
 
@@ -120,7 +131,7 @@ export default function ParentDashboard() {
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Posted by {post.profiles?.full_name || "Teacher"}
+                      Posted by {post.author_name}
                     </p>
                     <p className="text-sm text-foreground/80 whitespace-pre-line">
                       {post.content}

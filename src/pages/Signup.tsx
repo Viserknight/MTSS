@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Eye, EyeOff, Mail, Lock, User, GraduationCap, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import mtssLogo from "@/assets/mtss-logo.png";
 
 type UserRole = "teacher" | "parent";
@@ -14,6 +15,7 @@ type UserRole = "teacher" | "parent";
 const Signup = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, role, signUp, isLoading: authLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,6 +25,14 @@ const Signup = () => {
     confirmPassword: "",
     role: "teacher" as UserRole,
   });
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && role) {
+      const dashboardPath = role === "admin" ? "/admin" : role === "teacher" ? "/teacher" : "/parent";
+      navigate(dashboardPath, { replace: true });
+    }
+  }, [user, role, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,22 +57,31 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    // TODO: Implement actual authentication with Supabase
-    try {
+    const { error } = await signUp(formData.email, formData.password, formData.name, formData.role);
+
+    if (error) {
       toast({
-        title: "Signup functionality coming soon",
-        description: "Authentication will be implemented with Lovable Cloud.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Signup failed",
+        description: error.message || "Could not create account. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast({
+        title: "Account created!",
+        description: "Welcome to MTSS. Redirecting to your dashboard...",
+      });
     }
+
+    setIsLoading(false);
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

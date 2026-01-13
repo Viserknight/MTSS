@@ -3,10 +3,31 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+
+// Teacher pages
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherPosts from "./pages/teacher/TeacherPosts";
+import NewPost from "./pages/teacher/NewPost";
+import LessonPlans from "./pages/teacher/LessonPlans";
+import NewLessonPlan from "./pages/teacher/NewLessonPlan";
+
+// Parent pages
+import ParentDashboard from "./pages/parent/ParentDashboard";
+import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
+
+// Admin pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
+import AdminPosts from "./pages/admin/AdminPosts";
+import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
 
 const queryClient = new QueryClient();
 
@@ -16,13 +37,117 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Teacher Routes */}
+            <Route
+              path="/teacher"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/posts"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherPosts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/posts/new"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <NewPost />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/lesson-plans"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <LessonPlans />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/lesson-plans/new"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <NewLessonPlan />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Parent Routes */}
+            <Route
+              path="/parent"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/parent/announcements"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentAnnouncements />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/audit-logs"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminAuditLogs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/posts"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminPosts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/lesson-plans"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminLessonPlans />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
