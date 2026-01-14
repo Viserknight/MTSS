@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SchoolAnthem from "./pages/SchoolAnthem";
+import MediaGallery from "./pages/MediaGallery";
 import NotFound from "./pages/NotFound";
 
 // Teacher pages
@@ -46,6 +47,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/school-anthem" element={<SchoolAnthem />} />
+            <Route path="/gallery" element={<MediaGallery />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 

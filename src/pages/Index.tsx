@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Music } from "lucide-react";
+import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Music, Image } from "lucide-react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
 const Index = () => {
@@ -22,6 +22,12 @@ const Index = () => {
               <Link to="/school-anthem">
                 <Music className="mr-1 h-4 w-4" />
                 Anthem
+              </Link>
+            </Button>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/gallery">
+                <Image className="mr-1 h-4 w-4" />
+                Gallery
               </Link>
             </Button>
             <Button variant="ghost" asChild>
