@@ -38,6 +38,33 @@ export type Database = {
         }
         Relationships: []
       }
+      children: {
+        Row: {
+          created_at: string
+          date_of_birth: string
+          favorite_animal: string
+          id: string
+          name: string
+          parent_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_of_birth: string
+          favorite_animal: string
+          id?: string
+          name: string
+          parent_id: string
+        }
+        Update: {
+          created_at?: string
+          date_of_birth?: string
+          favorite_animal?: string
+          id?: string
+          name?: string
+          parent_id?: string
+        }
+        Relationships: []
+      }
       class_members: {
         Row: {
           class_id: string
