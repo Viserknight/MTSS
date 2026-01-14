@@ -9,6 +9,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import SchoolAnthem from "./pages/SchoolAnthem";
 import NotFound from "./pages/NotFound";
 
 // Teacher pages
@@ -44,6 +45,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/school-anthem" element={<SchoolAnthem />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 

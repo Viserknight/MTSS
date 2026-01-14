@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck } from "lucide-react";
+import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Music } from "lucide-react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
 const Index = () => {
@@ -18,6 +18,12 @@ const Index = () => {
             </div>
           </Link>
           <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/school-anthem">
+                <Music className="mr-1 h-4 w-4" />
+                Anthem
+              </Link>
+            </Button>
             <Button variant="ghost" asChild>
               <Link to="/login">Login</Link>
             </Button>
