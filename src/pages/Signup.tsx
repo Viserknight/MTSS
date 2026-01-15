@@ -4,13 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Eye, EyeOff, Mail, Lock, User, GraduationCap, Users } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Baby, Heart, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import mtssLogo from "@/assets/mtss-logo.png";
-
-type UserRole = "teacher" | "parent";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -23,7 +21,9 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "teacher" as UserRole,
+    childName: "",
+    favoriteAnimal: "",
+    dateOfBirth: "",
   });
 
   // Redirect if already logged in
@@ -55,9 +55,18 @@ const Signup = () => {
       return;
     }
 
+    if (!formData.childName.trim() || !formData.favoriteAnimal.trim() || !formData.dateOfBirth) {
+      toast({
+        title: "Missing child information",
+        description: "Please fill in all child details.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
-    const { error } = await signUp(formData.email, formData.password, formData.name, formData.role);
+    const { error, userId } = await signUp(formData.email, formData.password, formData.name);
 
     if (error) {
       toast({
@@ -65,10 +74,38 @@ const Signup = () => {
         description: error.message || "Could not create account. Please try again.",
         variant: "destructive",
       });
+      setIsLoading(false);
+      return;
+    }
+
+    // If user was created successfully, add the child record
+    if (userId) {
+      const { error: childError } = await supabase
+        .from("children")
+        .insert({
+          parent_id: userId,
+          name: formData.childName.trim(),
+          favorite_animal: formData.favoriteAnimal.trim(),
+          date_of_birth: formData.dateOfBirth,
+        });
+
+      if (childError) {
+        console.error("Error adding child:", childError);
+        toast({
+          title: "Account created",
+          description: "Your account was created but there was an issue saving child info. You can add it later.",
+          variant: "default",
+        });
+      } else {
+        toast({
+          title: "Account created!",
+          description: "Welcome to MTSS. Redirecting to your dashboard...",
+        });
+      }
     } else {
       toast({
         title: "Account created!",
-        description: "Welcome to MTSS. Redirecting to your dashboard...",
+        description: "Welcome to MTSS. Please check your email to confirm your account.",
       });
     }
 
@@ -98,51 +135,16 @@ const Signup = () => {
         <Card className="w-full max-w-md animate-scale-in">
           <CardHeader className="text-center">
             <img src={mtssLogo} alt="MTSS" className="h-16 w-auto mx-auto mb-4" />
-            <CardTitle className="font-heading text-2xl">Create Account</CardTitle>
+            <CardTitle className="font-heading text-2xl">Parent Registration</CardTitle>
             <CardDescription>
-              Join the MTSS community today
+              Join the MTSS community and stay connected with your child's education
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Role Selection */}
-              <div className="space-y-3">
-                <Label>I am a</Label>
-                <RadioGroup
-                  value={formData.role}
-                  onValueChange={(value) => setFormData({ ...formData, role: value as UserRole })}
-                  className="grid grid-cols-2 gap-4"
-                >
-                  <Label
-                    htmlFor="teacher"
-                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                      formData.role === "teacher"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <RadioGroupItem value="teacher" id="teacher" className="sr-only" />
-                    <GraduationCap className={`h-8 w-8 mb-2 ${formData.role === "teacher" ? "text-primary" : "text-muted-foreground"}`} />
-                    <span className={`font-medium ${formData.role === "teacher" ? "text-primary" : ""}`}>Teacher</span>
-                  </Label>
-                  <Label
-                    htmlFor="parent"
-                    className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                      formData.role === "parent"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <RadioGroupItem value="parent" id="parent" className="sr-only" />
-                    <Users className={`h-8 w-8 mb-2 ${formData.role === "parent" ? "text-primary" : "text-muted-foreground"}`} />
-                    <span className={`font-medium ${formData.role === "parent" ? "text-primary" : ""}`}>Parent</span>
-                  </Label>
-                </RadioGroup>
-              </div>
-
-              {/* Name */}
+              {/* Parent Name */}
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">Your Full Name</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -210,6 +212,66 @@ const Signup = () => {
                     className="pl-10"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Separator */}
+              <div className="relative py-4">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">Child Information</span>
+                </div>
+              </div>
+
+              {/* Child Name */}
+              <div className="space-y-2">
+                <Label htmlFor="childName">Child's Name</Label>
+                <div className="relative">
+                  <Baby className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="childName"
+                    type="text"
+                    placeholder="Your child's full name"
+                    className="pl-10"
+                    value={formData.childName}
+                    onChange={(e) => setFormData({ ...formData, childName: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Favorite Animal */}
+              <div className="space-y-2">
+                <Label htmlFor="favoriteAnimal">Child's Favorite Animal</Label>
+                <div className="relative">
+                  <Heart className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="favoriteAnimal"
+                    type="text"
+                    placeholder="e.g., Lion, Elephant, Dog"
+                    className="pl-10"
+                    value={formData.favoriteAnimal}
+                    onChange={(e) => setFormData({ ...formData, favoriteAnimal: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Date of Birth */}
+              <div className="space-y-2">
+                <Label htmlFor="dateOfBirth">Child's Date of Birth</Label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    className="pl-10"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
                     required
                   />
                 </div>
