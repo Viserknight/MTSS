@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SchoolAnthem from "./pages/SchoolAnthem";
 import MediaGallery from "./pages/MediaGallery";
+import TeacherSignup from "./pages/TeacherSignup";
 import NotFound from "./pages/NotFound";
 
 // Teacher pages
@@ -33,6 +34,7 @@ import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminPosts from "./pages/admin/AdminPosts";
 import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
 import AdminTeacherVerification from "./pages/admin/AdminTeacherVerification";
+import AdminTeacherInvitations from "./pages/admin/AdminTeacherInvitations";
 import AdminClasses from "./pages/admin/AdminClasses";
 
 const queryClient = new QueryClient();
@@ -50,6 +52,7 @@ const App = () => (
             <Route path="/gallery" element={<MediaGallery />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/teacher-signup" element={<TeacherSignup />} />
 
             {/* Teacher Routes */}
             <Route
@@ -157,6 +160,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminClasses />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/teacher-invitations"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminTeacherInvitations />
                 </ProtectedRoute>
               }
             />

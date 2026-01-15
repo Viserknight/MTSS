@@ -13,7 +13,8 @@ import {
   X,
   GraduationCap,
   Shield,
-  Home
+  Home,
+  Mail
 } from "lucide-react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
@@ -45,6 +46,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     admin: [
       { to: "/admin", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/admin/users", icon: Users, label: "Users" },
+      { to: "/admin/teacher-invitations", icon: Mail, label: "Teacher Invitations" },
+      { to: "/admin/teacher-verification", icon: GraduationCap, label: "Teacher Verification" },
+      { to: "/admin/classes", icon: Users, label: "Classes" },
       { to: "/admin/audit-logs", icon: ClipboardList, label: "Audit Logs" },
       { to: "/admin/posts", icon: FileText, label: "All Posts" },
       { to: "/admin/lesson-plans", icon: Sparkles, label: "Lesson Plans" },
