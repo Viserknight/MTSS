@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Bell, Calendar } from "lucide-react";
+import { ChildrenManager } from "@/components/ChildrenManager";
 
 export default function ParentDashboard() {
   const { user } = useAuth();
@@ -88,6 +89,9 @@ export default function ParentDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Children Manager */}
+        <ChildrenManager />
 
         {/* Announcements */}
         <Card>
