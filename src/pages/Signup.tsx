@@ -55,10 +55,14 @@ const Signup = () => {
       return;
     }
 
-    if (!formData.childName.trim() || !formData.favoriteAnimal.trim() || !formData.dateOfBirth) {
+    // Child info is now optional - parents can add children from their dashboard
+    const hasChildInfo = formData.childName.trim() && formData.favoriteAnimal.trim() && formData.dateOfBirth;
+    
+    // If they started filling child info, require all fields
+    if ((formData.childName.trim() || formData.favoriteAnimal.trim() || formData.dateOfBirth) && !hasChildInfo) {
       toast({
-        title: "Missing child information",
-        description: "Please fill in all child details.",
+        title: "Incomplete child information",
+        description: "Please fill in all child details or leave them empty to add later.",
         variant: "destructive",
       });
       return;
@@ -78,8 +82,8 @@ const Signup = () => {
       return;
     }
 
-    // If user was created successfully, add the child record
-    if (userId) {
+    // If user was created successfully and child info was provided, add the child record
+    if (userId && hasChildInfo) {
       const { error: childError } = await supabase
         .from("children")
         .insert({
@@ -93,7 +97,7 @@ const Signup = () => {
         console.error("Error adding child:", childError);
         toast({
           title: "Account created",
-          description: "Your account was created but there was an issue saving child info. You can add it later.",
+          description: "Your account was created but there was an issue saving child info. You can add it from your dashboard.",
           variant: "default",
         });
       } else {
@@ -102,6 +106,11 @@ const Signup = () => {
           description: "Welcome to MTSS. Redirecting to your dashboard...",
         });
       }
+    } else if (userId) {
+      toast({
+        title: "Account created!",
+        description: "Welcome to MTSS. You can add your child's information from your dashboard.",
+      });
     } else {
       toast({
         title: "Account created!",
@@ -223,9 +232,13 @@ const Signup = () => {
                   <span className="w-full border-t border-border" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Child Information</span>
+                  <span className="bg-card px-2 text-muted-foreground">Child Information (Optional)</span>
                 </div>
               </div>
+              
+              <p className="text-xs text-muted-foreground text-center -mt-2">
+                You can add your child now or later from your dashboard
+              </p>
 
               {/* Child Name */}
               <div className="space-y-2">
@@ -239,7 +252,6 @@ const Signup = () => {
                     className="pl-10"
                     value={formData.childName}
                     onChange={(e) => setFormData({ ...formData, childName: e.target.value })}
-                    required
                   />
                 </div>
               </div>
@@ -256,7 +268,6 @@ const Signup = () => {
                     className="pl-10"
                     value={formData.favoriteAnimal}
                     onChange={(e) => setFormData({ ...formData, favoriteAnimal: e.target.value })}
-                    required
                   />
                 </div>
               </div>
@@ -272,11 +283,9 @@ const Signup = () => {
                     className="pl-10"
                     value={formData.dateOfBirth}
                     onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                    required
                   />
                 </div>
               </div>
-
               <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Create Account"}
               </Button>
