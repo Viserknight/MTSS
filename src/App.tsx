@@ -9,7 +9,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import SchoolAnthem from "./pages/SchoolAnthem";
+
 import MediaGallery from "./pages/MediaGallery";
 import TeacherSignup from "./pages/TeacherSignup";
 import NotFound from "./pages/NotFound";
@@ -48,7 +48,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/school-anthem" element={<SchoolAnthem />} />
+            
             <Route path="/gallery" element={<MediaGallery />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
