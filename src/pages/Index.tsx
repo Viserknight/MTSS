@@ -1,29 +1,28 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Music, Image } from "lucide-react";
+import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Image, Menu, X } from "lucide-react";
+import { useState } from "react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
 const Index = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={mtssLogo} alt="MTSS Logo" className="h-12 w-auto" />
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <img src={mtssLogo} alt="MTSS Logo" className="h-10 sm:h-12 w-auto" />
             <div className="hidden sm:block">
               <p className="font-heading font-bold text-lg leading-tight">MTSS</p>
               <p className="text-xs text-muted-foreground">We Strive for Excellence</p>
             </div>
           </Link>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/school-anthem">
-                <Music className="mr-1 h-4 w-4" />
-                Anthem
-              </Link>
-            </Button>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
               <Link to="/gallery">
                 <Image className="mr-1 h-4 w-4" />
@@ -37,7 +36,35 @@ const Index = () => {
               <Link to="/signup">Get Started</Link>
             </Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-b border-border px-4 py-4 space-y-2">
+            <Button variant="ghost" className="w-full justify-start" asChild onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/gallery">
+                <Image className="mr-2 h-4 w-4" />
+                Gallery
+              </Link>
+            </Button>
+            <Button variant="ghost" className="w-full justify-start" asChild onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button className="w-full" asChild onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/signup">Get Started</Link>
+            </Button>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -50,24 +77,24 @@ const Index = () => {
               className="h-32 md:h-40 w-auto mx-auto mb-8 drop-shadow-2xl"
             />
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-bold text-secondary-foreground mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-secondary-foreground mb-4 sm:mb-6 animate-fade-in px-2" style={{ animationDelay: "0.1s" }}>
             Mogwase Technical<br />
             <span className="text-primary">Secondary School</span>
           </h1>
-          <p className="text-xl md:text-2xl text-secondary-foreground/80 mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-lg sm:text-xl md:text-2xl text-secondary-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.2s" }}>
             "We Strive for Excellence"
           </p>
-          <p className="text-lg text-secondary-foreground/70 mb-10 max-w-xl mx-auto animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <p className="text-base sm:text-lg text-secondary-foreground/70 mb-8 sm:mb-10 max-w-xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.3s" }}>
             Connecting Teachers, Parents, and Students through our comprehensive educational platform.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
-            <Button size="lg" className="text-lg px-8" asChild>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in px-4" style={{ animationDelay: "0.4s" }}>
+            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8" asChild>
               <Link to="/signup">
                 <GraduationCap className="mr-2 h-5 w-5" />
                 Join as Teacher
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 bg-secondary-foreground/10 border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/20" asChild>
+            <Button size="lg" variant="outline" className="text-base sm:text-lg px-6 sm:px-8 bg-secondary-foreground/10 border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/20" asChild>
               <Link to="/signup">
                 <Users className="mr-2 h-5 w-5" />
                 Join as Parent
