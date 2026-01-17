@@ -26,10 +26,12 @@ import TeacherFeed from "./pages/teacher/TeacherFeed";
 // Parent pages
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
+import ParentFeed from "./pages/parent/ParentFeed";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminChildren from "./pages/admin/AdminChildren";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminPosts from "./pages/admin/AdminPosts";
 import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
@@ -122,6 +124,14 @@ const App = () => (
               }
             />
             <Route
+              path="/parent/feed"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentFeed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/parent/announcements"
               element={
                 <ProtectedRoute allowedRoles={["parent", "admin"]}>
@@ -144,6 +154,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/children"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminChildren />
                 </ProtectedRoute>
               }
             />

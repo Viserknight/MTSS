@@ -90,14 +90,13 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in px-4" style={{ animationDelay: "0.4s" }}>
             <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8" asChild>
               <Link to="/signup">
-                <GraduationCap className="mr-2 h-5 w-5" />
-                Join as Teacher
+                <Users className="mr-2 h-5 w-5" />
+                Get Started
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="text-base sm:text-lg px-6 sm:px-8 bg-secondary-foreground/10 border-secondary-foreground/30 text-secondary-foreground hover:bg-secondary-foreground/20" asChild>
-              <Link to="/signup">
-                <Users className="mr-2 h-5 w-5" />
-                Join as Parent
+              <Link to="/login">
+                Sign In
               </Link>
             </Button>
           </div>

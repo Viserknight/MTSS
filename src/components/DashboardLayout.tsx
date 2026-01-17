@@ -14,7 +14,8 @@ import {
   GraduationCap,
   Shield,
   Home,
-  Mail
+  Mail,
+  Baby
 } from "lucide-react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
@@ -41,11 +42,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     ],
     parent: [
       { to: "/parent", icon: LayoutDashboard, label: "Dashboard" },
+      { to: "/parent/feed", icon: FileText, label: "School Feed" },
       { to: "/parent/announcements", icon: FileText, label: "Announcements" },
     ],
     admin: [
       { to: "/admin", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/admin/users", icon: Users, label: "Users" },
+      { to: "/admin/children", icon: Baby, label: "All Children" },
       { to: "/admin/teacher-invitations", icon: Mail, label: "Teacher Invitations" },
       { to: "/admin/teacher-verification", icon: GraduationCap, label: "Teacher Verification" },
       { to: "/admin/classes", icon: Users, label: "Classes" },
