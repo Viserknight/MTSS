@@ -22,11 +22,13 @@ import LessonPlans from "./pages/teacher/LessonPlans";
 import NewLessonPlan from "./pages/teacher/NewLessonPlan";
 import TeacherClasses from "./pages/teacher/TeacherClasses";
 import TeacherFeed from "./pages/teacher/TeacherFeed";
+import ReportCards from "./pages/teacher/ReportCards";
 
 // Parent pages
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
 import ParentFeed from "./pages/parent/ParentFeed";
+import ParentReportCards from "./pages/parent/ParentReportCards";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -113,6 +115,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/teacher/report-cards"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <ReportCards />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Parent Routes */}
             <Route
@@ -128,6 +138,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["parent", "admin"]}>
                   <ParentFeed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/parent/report-cards"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentReportCards />
                 </ProtectedRoute>
               }
             />

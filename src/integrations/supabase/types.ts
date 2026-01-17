@@ -38,11 +38,51 @@ export type Database = {
         }
         Relationships: []
       }
+      child_class_assignments: {
+        Row: {
+          assigned_by: string
+          child_id: string
+          class_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          assigned_by: string
+          child_id: string
+          class_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          assigned_by?: string
+          child_id?: string
+          class_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "child_class_assignments_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "child_class_assignments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       children: {
         Row: {
           created_at: string
           date_of_birth: string
           favorite_animal: string
+          grade: string | null
           id: string
           name: string
           parent_id: string
@@ -51,6 +91,7 @@ export type Database = {
           created_at?: string
           date_of_birth: string
           favorite_animal: string
+          grade?: string | null
           id?: string
           name: string
           parent_id: string
@@ -59,6 +100,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string
           favorite_animal?: string
+          grade?: string | null
           id?: string
           name?: string
           parent_id?: string
@@ -207,6 +249,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      report_cards: {
+        Row: {
+          child_id: string
+          created_at: string
+          file_name: string
+          file_path: string
+          id: string
+          term: string
+          uploaded_by: string
+          year: number
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          file_name: string
+          file_path: string
+          id?: string
+          term: string
+          uploaded_by: string
+          year: number
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          term?: string
+          uploaded_by?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_cards_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       teacher_invitations: {
         Row: {

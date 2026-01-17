@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, Users, Shield, BookOpen, Sparkles, ClipboardCheck, Image, Menu, X } from "lucide-react";
+import { GraduationCap, Users, Shield, Image, Menu, X } from "lucide-react";
 import { useState } from "react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
@@ -103,96 +102,50 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* About Section */}
       <section className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-              Built for <span className="text-primary">Education Excellence</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              A comprehensive platform designed to enhance communication and learning outcomes at MTSS.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Teacher Features */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <GraduationCap className="h-6 w-6 text-primary" />
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-6">
+                Connecting <span className="text-primary">Education</span> & <span className="text-primary">Community</span>
+              </h2>
+              <p className="text-muted-foreground text-lg mb-6">
+                Mogwase Technical Secondary School provides a comprehensive digital platform that bridges the gap between teachers, parents, and school administration.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <GraduationCap className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Teachers</h3>
+                    <p className="text-muted-foreground text-sm">Post announcements, upload report cards, and create AI-powered lesson plans.</p>
+                  </div>
                 </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">For Teachers</h3>
-                <p className="text-muted-foreground">
-                  Create posts, announcements, and share important updates with parents instantly.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* AI Lesson Plans */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-accent-foreground" />
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Users className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Parents</h3>
+                    <p className="text-muted-foreground text-sm">Stay informed with school updates, view report cards, and track your child's progress.</p>
+                  </div>
                 </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">AI Lesson Plans</h3>
-                <p className="text-muted-foreground">
-                  Generate CAPS-aligned lesson plans with AI assistance. Save time, teach better.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Parent Access */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-success/10 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-success" />
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Shield className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Administration</h3>
+                    <p className="text-muted-foreground text-sm">Manage users, classes, and oversee all school activities in one place.</p>
+                  </div>
                 </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">For Parents</h3>
-                <p className="text-muted-foreground">
-                  Stay informed about your child's education. View posts and announcements from teachers.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Admin Dashboard */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-secondary flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-secondary-foreground" />
-                </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">Admin Control</h3>
-                <p className="text-muted-foreground">
-                  Full oversight with audit logs, user management, and content moderation tools.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Curriculum Aligned */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <BookOpen className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">CAPS Aligned</h3>
-                <p className="text-muted-foreground">
-                  All lesson plans and resources aligned with the South African CAPS curriculum.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Audit & Compliance */}
-            <Card className="card-hover border-2 hover:border-primary/30">
-              <CardContent className="pt-6">
-                <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mb-4">
-                  <ClipboardCheck className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <h3 className="font-heading text-xl font-semibold mb-2">Audit Trails</h3>
-                <p className="text-muted-foreground">
-                  Complete transparency with detailed logs of all teacher activities.
-                </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
+            <div className="hidden md:flex justify-center">
+              <img src={mtssLogo} alt="MTSS" className="h-64 w-auto opacity-80" />
+            </div>
           </div>
         </div>
       </section>
