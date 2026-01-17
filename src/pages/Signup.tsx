@@ -144,9 +144,9 @@ const Signup = () => {
         <Card className="w-full max-w-md animate-scale-in">
           <CardHeader className="text-center">
             <img src={mtssLogo} alt="MTSS" className="h-16 w-auto mx-auto mb-4" />
-            <CardTitle className="font-heading text-2xl">Parent Registration</CardTitle>
+            <CardTitle className="font-heading text-2xl">Create Account</CardTitle>
             <CardDescription>
-              Join the MTSS community and stay connected with your child's education
+              Join the MTSS community. Register children from your dashboard after signing up.
             </CardDescription>
           </CardHeader>
           <CardContent>
