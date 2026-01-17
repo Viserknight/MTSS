@@ -17,6 +17,7 @@ interface Child {
   name: string;
   favorite_animal: string;
   date_of_birth: string;
+  grade: string | null;
   parent_id: string;
   created_at: string;
   parent_name?: string;
@@ -38,7 +39,10 @@ export default function AdminChildren() {
     name: "",
     favorite_animal: "",
     date_of_birth: "",
+    grade: "",
   });
+
+  const GRADES = ["8", "9", "10", "11", "12"];
 
   useEffect(() => {
     fetchChildren();
@@ -138,6 +142,7 @@ export default function AdminChildren() {
       name: child.name,
       favorite_animal: child.favorite_animal,
       date_of_birth: child.date_of_birth,
+      grade: child.grade || "",
     });
     setEditDialogOpen(true);
   };
@@ -151,6 +156,7 @@ export default function AdminChildren() {
         name: editForm.name,
         favorite_animal: editForm.favorite_animal,
         date_of_birth: editForm.date_of_birth,
+        grade: editForm.grade || null,
       })
       .eq("id", selectedChild.id);
 
@@ -262,6 +268,7 @@ export default function AdminChildren() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Child Name</TableHead>
+                      <TableHead>Grade</TableHead>
                       <TableHead>Age</TableHead>
                       <TableHead>Favorite Animal</TableHead>
                       <TableHead>Parent</TableHead>
@@ -277,6 +284,13 @@ export default function AdminChildren() {
                             <Baby className="h-4 w-4 text-muted-foreground" />
                             {child.name}
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          {child.grade ? (
+                            <Badge className="bg-primary">Grade {child.grade}</Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-muted-foreground">Not assigned</Badge>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary">
@@ -367,6 +381,23 @@ export default function AdminChildren() {
                 value={editForm.date_of_birth}
                 onChange={(e) => setEditForm({ ...editForm, date_of_birth: e.target.value })}
               />
+            </div>
+            <div className="space-y-2">
+              <Label>Grade (8-12)</Label>
+              <Select
+                value={editForm.grade}
+                onValueChange={(v) => setEditForm({ ...editForm, grade: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Assign grade" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Not assigned</SelectItem>
+                  {GRADES.map((g) => (
+                    <SelectItem key={g} value={g}>Grade {g}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <DialogFooter>

@@ -38,11 +38,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     teacher: [
       { to: "/teacher", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/teacher/posts", icon: FileText, label: "Posts" },
+      { to: "/teacher/report-cards", icon: ClipboardList, label: "Report Cards" },
       { to: "/teacher/lesson-plans", icon: Sparkles, label: "AI Lesson Plans" },
     ],
     parent: [
       { to: "/parent", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/parent/feed", icon: FileText, label: "School Feed" },
+      { to: "/parent/report-cards", icon: ClipboardList, label: "Report Cards" },
       { to: "/parent/announcements", icon: FileText, label: "Announcements" },
     ],
     admin: [
