@@ -23,12 +23,16 @@ import NewLessonPlan from "./pages/teacher/NewLessonPlan";
 import TeacherClasses from "./pages/teacher/TeacherClasses";
 import TeacherFeed from "./pages/teacher/TeacherFeed";
 import ReportCards from "./pages/teacher/ReportCards";
+import TeacherAttendance from "./pages/teacher/Attendance";
+import TeacherMessages from "./pages/teacher/Messages";
 
 // Parent pages
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
 import ParentFeed from "./pages/parent/ParentFeed";
 import ParentReportCards from "./pages/parent/ParentReportCards";
+import ParentTimetable from "./pages/parent/ParentTimetable";
+import ParentAttendance from "./pages/parent/ParentAttendance";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -40,6 +44,8 @@ import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
 import AdminTeacherVerification from "./pages/admin/AdminTeacherVerification";
 import AdminTeacherInvitations from "./pages/admin/AdminTeacherInvitations";
 import AdminClasses from "./pages/admin/AdminClasses";
+import AdminTimetables from "./pages/admin/AdminTimetables";
+import AdminAttendance from "./pages/admin/AdminAttendance";
 
 const queryClient = new QueryClient();
 
@@ -123,6 +129,22 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/teacher/attendance"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherAttendance />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/messages"
+              element={
+                <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+                  <TeacherMessages />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Parent Routes */}
             <Route
@@ -142,18 +164,26 @@ const App = () => (
               }
             />
             <Route
-              path="/parent/report-cards"
+              path="/parent/timetable"
               element={
                 <ProtectedRoute allowedRoles={["parent", "admin"]}>
-                  <ParentReportCards />
+                  <ParentTimetable />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/parent/announcements"
+              path="/parent/attendance"
               element={
                 <ProtectedRoute allowedRoles={["parent", "admin"]}>
-                  <ParentAnnouncements />
+                  <ParentAttendance />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/parent/report-cards"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentReportCards />
                 </ProtectedRoute>
               }
             />
@@ -196,6 +226,22 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminClasses />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/timetables"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminTimetables />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/attendance"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminAttendance />
                 </ProtectedRoute>
               }
             />
