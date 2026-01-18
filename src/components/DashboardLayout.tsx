@@ -15,7 +15,10 @@ import {
   Shield,
   Home,
   Mail,
-  Baby
+  Baby,
+  Calendar,
+  CheckSquare,
+  MessageSquare
 } from "lucide-react";
 import mtssLogo from "@/assets/mtss-logo.png";
 
@@ -39,24 +42,29 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       { to: "/teacher", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/teacher/posts", icon: FileText, label: "Posts" },
       { to: "/teacher/report-cards", icon: ClipboardList, label: "Report Cards" },
+      { to: "/teacher/attendance", icon: CheckSquare, label: "Attendance" },
+      { to: "/teacher/messages", icon: MessageSquare, label: "Messages" },
       { to: "/teacher/lesson-plans", icon: Sparkles, label: "AI Lesson Plans" },
     ],
     parent: [
       { to: "/parent", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/parent/feed", icon: FileText, label: "School Feed" },
+      { to: "/parent/timetable", icon: Calendar, label: "Timetable" },
+      { to: "/parent/attendance", icon: CheckSquare, label: "Attendance" },
       { to: "/parent/report-cards", icon: ClipboardList, label: "Report Cards" },
-      { to: "/parent/announcements", icon: FileText, label: "Announcements" },
     ],
     admin: [
       { to: "/admin", icon: LayoutDashboard, label: "Dashboard" },
       { to: "/admin/users", icon: Users, label: "Users" },
       { to: "/admin/children", icon: Baby, label: "All Children" },
-      { to: "/admin/teacher-invitations", icon: Mail, label: "Teacher Invitations" },
-      { to: "/admin/teacher-verification", icon: GraduationCap, label: "Teacher Verification" },
       { to: "/admin/classes", icon: Users, label: "Classes" },
-      { to: "/admin/audit-logs", icon: ClipboardList, label: "Audit Logs" },
+      { to: "/admin/timetables", icon: Calendar, label: "Timetables" },
+      { to: "/admin/attendance", icon: CheckSquare, label: "Attendance" },
+      { to: "/admin/teacher-invitations", icon: Mail, label: "Invitations" },
+      { to: "/admin/teacher-verification", icon: GraduationCap, label: "Verification" },
       { to: "/admin/posts", icon: FileText, label: "All Posts" },
       { to: "/admin/lesson-plans", icon: Sparkles, label: "Lesson Plans" },
+      { to: "/admin/audit-logs", icon: ClipboardList, label: "Audit Logs" },
     ],
   };
 

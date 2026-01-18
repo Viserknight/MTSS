@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          child_id: string
+          class_id: string
+          created_at: string
+          date: string
+          id: string
+          marked_by: string
+          notes: string | null
+          status: string
+        }
+        Insert: {
+          child_id: string
+          class_id: string
+          created_at?: string
+          date: string
+          id?: string
+          marked_by: string
+          notes?: string | null
+          status: string
+        }
+        Update: {
+          child_id?: string
+          class_id?: string
+          created_at?: string
+          date?: string
+          id?: string
+          marked_by?: string
+          notes?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -193,6 +241,36 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean
+          recipient_id: string
+          sender_id: string
+          subject: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_id: string
+          sender_id: string
+          subject: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_id?: string
+          sender_id?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           author_id: string
@@ -320,6 +398,53 @@ export type Database = {
           token?: string
         }
         Relationships: []
+      }
+      timetables: {
+        Row: {
+          class_id: string
+          created_at: string
+          created_by: string
+          day_of_week: string
+          end_time: string
+          id: string
+          room: string | null
+          start_time: string
+          subject: string
+          teacher_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          created_by: string
+          day_of_week: string
+          end_time: string
+          id?: string
+          room?: string | null
+          start_time: string
+          subject: string
+          teacher_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          created_by?: string
+          day_of_week?: string
+          end_time?: string
+          id?: string
+          room?: string | null
+          start_time?: string
+          subject?: string
+          teacher_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timetables_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
