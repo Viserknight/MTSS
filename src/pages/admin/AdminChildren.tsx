@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Baby, Calendar, Heart, User, Pencil, Trash2 } from "lucide-react";
+import { Search, Baby, Calendar, Heart, User, Pencil, Trash2, School, Link2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Child {
   id: string;
@@ -22,19 +23,30 @@ interface Child {
   created_at: string;
   parent_name?: string;
   parent_email?: string;
+  assigned_class?: { id: string; name: string; grade: string } | null;
+}
+
+interface ClassOption {
+  id: string;
+  name: string;
+  grade: string;
 }
 
 export default function AdminChildren() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [children, setChildren] = useState<Child[]>([]);
   const [filteredChildren, setFilteredChildren] = useState<Child[]>([]);
+  const [classes, setClasses] = useState<ClassOption[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [ageFilter, setAgeFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
   
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [assignClassDialogOpen, setAssignClassDialogOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState<Child | null>(null);
+  const [selectedClassId, setSelectedClassId] = useState<string>("");
   const [editForm, setEditForm] = useState({
     name: "",
     favorite_animal: "",
@@ -46,11 +58,23 @@ export default function AdminChildren() {
 
   useEffect(() => {
     fetchChildren();
+    fetchClasses();
   }, []);
 
   useEffect(() => {
     filterChildren();
   }, [searchQuery, ageFilter, children]);
+
+  const fetchClasses = async () => {
+    const { data, error } = await supabase
+      .from("classes")
+      .select("id, name, grade")
+      .order("name");
+
+    if (!error && data) {
+      setClasses(data);
+    }
+  };
 
   const fetchChildren = async () => {
     setIsLoading(true);
@@ -77,10 +101,30 @@ export default function AdminChildren() {
       profiles?.map((p) => [p.id, { name: p.full_name, email: p.email }]) || []
     );
 
+    // Get class assignments
+    const childIds = childrenData?.map((c) => c.id) || [];
+    const { data: assignments } = await supabase
+      .from("child_class_assignments")
+      .select("child_id, class_id")
+      .in("child_id", childIds);
+
+    const { data: classesData } = await supabase
+      .from("classes")
+      .select("id, name, grade");
+
+    const classesMap = new Map(
+      classesData?.map((c) => [c.id, { id: c.id, name: c.name, grade: c.grade }]) || []
+    );
+
+    const assignmentsMap = new Map(
+      assignments?.map((a) => [a.child_id, classesMap.get(a.class_id) || null]) || []
+    );
+
     const childrenWithParents = (childrenData || []).map((child) => ({
       ...child,
       parent_name: profilesMap.get(child.parent_id)?.name || "Unknown",
       parent_email: profilesMap.get(child.parent_id)?.email || "Unknown",
+      assigned_class: assignmentsMap.get(child.id) || null,
     }));
 
     setChildren(childrenWithParents);
@@ -207,6 +251,49 @@ export default function AdminChildren() {
     fetchChildren();
   };
 
+  const openAssignClassDialog = (child: Child) => {
+    setSelectedChild(child);
+    setSelectedClassId(child.assigned_class?.id || "");
+    setAssignClassDialogOpen(true);
+  };
+
+  const handleAssignClass = async () => {
+    if (!selectedChild || !user) return;
+
+    // First, remove any existing assignment
+    await supabase
+      .from("child_class_assignments")
+      .delete()
+      .eq("child_id", selectedChild.id);
+
+    // If a class is selected, create new assignment
+    if (selectedClassId) {
+      const { error } = await supabase
+        .from("child_class_assignments")
+        .insert({
+          child_id: selectedChild.id,
+          class_id: selectedClassId,
+          assigned_by: user.id,
+        });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to assign class.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    toast({
+      title: "Success",
+      description: selectedClassId ? "Child assigned to class successfully." : "Class assignment removed.",
+    });
+    setAssignClassDialogOpen(false);
+    fetchChildren();
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -243,7 +330,7 @@ export default function AdminChildren() {
         </div>
 
         {/* Children Table */}
-        <Card>
+        <Card className="card-3d">
           <CardHeader>
             <CardTitle>Registered Children ({filteredChildren.length})</CardTitle>
             <CardDescription>
@@ -269,6 +356,7 @@ export default function AdminChildren() {
                     <TableRow>
                       <TableHead>Child Name</TableHead>
                       <TableHead>Grade</TableHead>
+                      <TableHead>Assigned Class</TableHead>
                       <TableHead>Age</TableHead>
                       <TableHead>Favorite Animal</TableHead>
                       <TableHead>Parent</TableHead>
@@ -290,6 +378,16 @@ export default function AdminChildren() {
                             <Badge className="bg-primary">Grade {child.grade}</Badge>
                           ) : (
                             <Badge variant="outline" className="text-muted-foreground">Not assigned</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {child.assigned_class ? (
+                            <Badge variant="secondary" className="flex items-center gap-1 w-fit">
+                              <School className="h-3 w-3" />
+                              {child.assigned_class.name}
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-muted-foreground">No class</Badge>
                           )}
                         </TableCell>
                         <TableCell>
@@ -323,6 +421,14 @@ export default function AdminChildren() {
                             <Button
                               variant="ghost"
                               size="icon"
+                              onClick={() => openAssignClassDialog(child)}
+                              title="Assign to class"
+                            >
+                              <Link2 className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               onClick={() => openEditDialog(child)}
                             >
                               <Pencil className="h-4 w-4" />
@@ -346,6 +452,47 @@ export default function AdminChildren() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Assign Class Dialog */}
+      <Dialog open={assignClassDialogOpen} onOpenChange={setAssignClassDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Assign {selectedChild?.name} to a Class</DialogTitle>
+            <DialogDescription>
+              Select a class to assign this child to. This will allow them to appear in attendance and timetable views.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Select Class</Label>
+              <Select value={selectedClassId} onValueChange={setSelectedClassId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a class" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">No class (remove assignment)</SelectItem>
+                  {classes.map((cls) => (
+                    <SelectItem key={cls.id} value={cls.id}>
+                      <span className="flex items-center gap-2">
+                        <School className="h-4 w-4" />
+                        {cls.name} - {cls.grade}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAssignClassDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAssignClass}>
+              {selectedClassId ? "Assign Class" : "Remove Assignment"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
