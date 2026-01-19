@@ -10,25 +10,25 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 nav-3d border-b border-border/50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 sm:gap-3">
-            <img src={mtssLogo} alt="MTSS Logo" className="h-10 sm:h-12 w-auto" />
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
+            <img src={mtssLogo} alt="MTSS Logo" className="h-10 sm:h-12 w-auto drop-shadow-lg group-hover:scale-105 transition-transform" />
             <div className="hidden sm:block">
-              <p className="font-heading font-bold text-lg leading-tight">MTSS</p>
+              <p className="font-heading font-bold text-lg leading-tight text-3d">MTSS</p>
               <p className="text-xs text-muted-foreground">We Strive for Excellence</p>
             </div>
           </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="hover-lift">
               <Link to="/gallery">
                 <Image className="mr-1 h-4 w-4" />
                 Gallery
               </Link>
             </Button>
-            <Button variant="ghost" asChild>
+            <Button variant="outline" asChild className="hover-lift">
               <Link to="/login">Login</Link>
             </Button>
             <Button asChild>
@@ -49,14 +49,14 @@ const Index = () => {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-background border-b border-border px-4 py-4 space-y-2">
-            <Button variant="ghost" className="w-full justify-start" asChild onClick={() => setMobileMenuOpen(false)}>
+          <div className="md:hidden glass-3d border-t border-border/50 px-4 py-4 space-y-2">
+            <Button variant="ghost" className="w-full justify-start hover-lift" asChild onClick={() => setMobileMenuOpen(false)}>
               <Link to="/gallery">
                 <Image className="mr-2 h-4 w-4" />
                 Gallery
               </Link>
             </Button>
-            <Button variant="ghost" className="w-full justify-start" asChild onClick={() => setMobileMenuOpen(false)}>
+            <Button variant="ghost" className="w-full justify-start hover-lift" asChild onClick={() => setMobileMenuOpen(false)}>
               <Link to="/login">Login</Link>
             </Button>
             <Button className="w-full" asChild onClick={() => setMobileMenuOpen(false)}>
