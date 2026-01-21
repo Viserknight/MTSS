@@ -491,6 +491,7 @@ export type Database = {
         Args: { _action: string; _details?: Json }
         Returns: undefined
       }
+      set_teacher_role: { Args: { target_user_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "teacher" | "parent"
