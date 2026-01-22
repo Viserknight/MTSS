@@ -12,18 +12,54 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Sparkles, Loader2, Save } from "lucide-react";
 
 const SUBJECTS = [
+  // Core Subjects
   "Mathematics",
+  "Mathematical Literacy",
   "English Home Language",
+  "English First Additional Language",
   "Afrikaans First Additional Language",
-  "Life Sciences",
+  "Life Orientation",
+  
+  // Sciences
   "Physical Sciences",
+  "Life Sciences",
+  "Natural Sciences",
+  
+  // Technical Subjects
+  "Engineering Graphics and Design (EGD)",
+  "Civil Technology",
+  "Electrical Technology",
+  "Mechanical Technology",
+  "Information Technology (IT)",
+  "Computer Applications Technology (CAT)",
+  "Technical Mathematics",
+  "Technical Sciences",
+  
+  // Vocational Subjects
+  "Welding and Metalwork",
+  "Motor Mechanics",
+  "Electrical Installation",
+  "Plumbing",
+  "Carpentry and Joinery",
+  "Bricklaying and Plastering",
+  
+  // Commerce & Business
+  "Accounting",
+  "Business Studies",
+  "Economics",
+  "Economic and Management Sciences",
+  
+  // Humanities & Arts
   "Geography",
   "History",
-  "Life Orientation",
-  "Technology",
-  "Economic and Management Sciences",
-  "Natural Sciences",
+  "Tourism",
+  "Consumer Studies",
   "Social Sciences",
+  
+  // Creative Arts
+  "Visual Arts",
+  "Design",
+  "Music",
 ];
 
 const GRADES = ["8", "9", "10", "11", "12"];

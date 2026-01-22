@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Search, FileText, Eye, EyeOff, Trash2 } from "lucide-react";
+import { Search, FileText, Eye, EyeOff, Trash2, Plus } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function AdminPosts() {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [posts, setPosts] = useState<any[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<any[]>([]);
@@ -102,11 +104,17 @@ export default function AdminPosts() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="font-heading text-3xl font-bold">All Posts</h1>
-          <p className="text-muted-foreground mt-1">
-            Review and moderate all teacher posts.
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="font-heading text-3xl font-bold">All Posts</h1>
+            <p className="text-muted-foreground mt-1">
+              Review and moderate all posts.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/admin/posts/new")}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Post
+          </Button>
         </div>
 
         {/* Search */}

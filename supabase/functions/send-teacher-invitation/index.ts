@@ -78,9 +78,9 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    // Get the origin from the request or use a default
-    const origin = req.headers.get("origin") || "https://id-preview--72353310-fddf-4360-b2c8-dd2fef0c8a81.lovable.app";
-    const inviteLink = `${origin}/teacher-signup?token=${token}`;
+    // Use production Vercel URL for email links
+    const productionUrl = "https://mtss-v02.lovable.app";
+    const inviteLink = `${productionUrl}/teacher-signup?token=${token}`;
 
     // Send invitation email
     const emailResponse = await resend.emails.send({

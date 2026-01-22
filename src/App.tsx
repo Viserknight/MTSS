@@ -40,12 +40,14 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminChildren from "./pages/admin/AdminChildren";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminPosts from "./pages/admin/AdminPosts";
+import AdminNewPost from "./pages/admin/AdminNewPost";
 import AdminLessonPlans from "./pages/admin/AdminLessonPlans";
 import AdminTeacherVerification from "./pages/admin/AdminTeacherVerification";
 import AdminTeacherInvitations from "./pages/admin/AdminTeacherInvitations";
 import AdminClasses from "./pages/admin/AdminClasses";
 import AdminTimetables from "./pages/admin/AdminTimetables";
 import AdminAttendance from "./pages/admin/AdminAttendance";
+import AdminDocuments from "./pages/admin/AdminDocuments";
 
 const queryClient = new QueryClient();
 
@@ -270,10 +272,26 @@ const App = () => (
               }
             />
             <Route
+              path="/admin/posts/new"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminNewPost />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/lesson-plans"
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminLessonPlans />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/documents"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminDocuments />
                 </ProtectedRoute>
               }
             />

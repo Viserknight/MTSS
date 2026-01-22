@@ -2,12 +2,26 @@ import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Users, GraduationCap, Shield } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Search, Users, GraduationCap, Shield, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function AdminUsers() {
+  const { toast } = useToast();
   const [users, setUsers] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,6 +70,40 @@ export default function AdminUsers() {
     setUsers(usersWithRoles);
     setFilteredUsers(usersWithRoles);
     setIsLoading(false);
+  };
+
+  const deleteUser = async (userId: string, userRole: string) => {
+    // Only allow deleting parents
+    if (userRole !== "parent") {
+      toast({
+        title: "Cannot delete",
+        description: "Only parents can be removed.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // First delete children associated with the parent
+      await supabase.from("children").delete().eq("parent_id", userId);
+      
+      // Delete user role
+      await supabase.from("user_roles").delete().eq("user_id", userId);
+      
+      // Delete profile
+      const { error } = await supabase.from("profiles").delete().eq("id", userId);
+
+      if (error) throw error;
+
+      toast({ title: "User removed successfully" });
+      fetchUsers();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to remove user",
+        variant: "destructive",
+      });
+    }
   };
 
   const getRoleBadge = (role: string) => {
@@ -136,6 +184,7 @@ export default function AdminUsers() {
                       <TableHead>Email</TableHead>
                       <TableHead>Role</TableHead>
                       <TableHead>Joined</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -148,6 +197,34 @@ export default function AdminUsers() {
                         <TableCell>{getRoleBadge(user.role)}</TableCell>
                         <TableCell className="text-muted-foreground">
                           {new Date(user.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {user.role === "parent" && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Remove this parent?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will remove the parent and their registered children from the system. This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteUser(user.id, user.role)}
+                                    className="bg-destructive hover:bg-destructive/90"
+                                  >
+                                    Remove
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}

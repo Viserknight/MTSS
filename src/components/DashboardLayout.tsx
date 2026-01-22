@@ -64,6 +64,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       { to: "/admin/teacher-verification", icon: GraduationCap, label: "Verification" },
       { to: "/admin/posts", icon: FileText, label: "All Posts" },
       { to: "/admin/lesson-plans", icon: Sparkles, label: "Lesson Plans" },
+      { to: "/admin/documents", icon: FileText, label: "Document AI" },
       { to: "/admin/audit-logs", icon: ClipboardList, label: "Audit Logs" },
     ],
   };
