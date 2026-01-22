@@ -2,3 +2,9 @@ project_id = "yygvhcccqzgnsnpjasan"
 
 [functions.generate-lesson-plan]
 verify_jwt = false
+
+[functions.process-document]
+verify_jwt = false
+
+[functions.send-teacher-invitation]
+verify_jwt = false
