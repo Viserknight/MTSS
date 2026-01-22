@@ -1,7 +1,15 @@
 {
   "rewrites": [
     {
-      "source": "/((?!ads\\.txt|robots\\.txt|favicon\\.ico|favicon\\.png|audio/.*|assets/.*).*)",
+      "source": "/ads.txt",
+      "destination": "/ads.txt"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
