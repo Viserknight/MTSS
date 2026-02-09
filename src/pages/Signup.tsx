@@ -315,14 +315,28 @@ const Signup = () => {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Link to="/login" className="text-primary font-medium hover:underline">
-                  Sign in
-                </Link>
-              </p>
-            </div>
+              <div className="mt-6 text-center space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Already have an account?{" "}
+                  <Link to="/login" className="text-primary font-medium hover:underline">
+                    Sign in
+                  </Link>
+                </p>
+                <div className="relative py-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">Are you a teacher?</span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Teachers must be invited by an administrator.{" "}
+                  <Link to="/teacher-signup" className="text-primary font-medium hover:underline">
+                    Register here
+                  </Link>
+                </p>
+              </div>
           </CardContent>
         </Card>
       </div>

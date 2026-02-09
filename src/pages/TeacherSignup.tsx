@@ -182,10 +182,19 @@ const TeacherSignup = () => {
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
-              <div className="mt-6 text-center">
-                <Link to="/login">
-                  <Button variant="outline" className="hover-lift">Go to Login</Button>
-                </Link>
+              <div className="mt-6 text-center space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Teacher accounts require an invitation from the school administrator. 
+                  If you haven't received one, please contact the administration office.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Link to="/login">
+                    <Button variant="outline" className="w-full hover-lift">Go to Login</Button>
+                  </Link>
+                  <Link to="/">
+                    <Button variant="ghost" className="w-full hover-lift">Back to Home</Button>
+                  </Link>
+                </div>
               </div>
             </CardContent>
           </Card>
