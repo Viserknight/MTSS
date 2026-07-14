@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { GraduationCap, Users, Shield, Image, Menu, X } from "lucide-react";
 import { useState } from "react";
 import mtssLogo from "@/assets/mtss-logo.png";
+import { Tilt3D } from "@/components/Tilt3D";
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -126,34 +127,40 @@ const Index = () => {
               <p className="text-muted-foreground text-lg mb-6">
                 Mogwase Technical Secondary School provides a comprehensive digital platform that bridges the gap between teachers, parents, and school administration.
               </p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow">
-                    <GraduationCap className="h-6 w-6 text-primary" />
+              <div className="space-y-4 perspective-container">
+                <Tilt3D className="rounded-xl">
+                  <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow" style={{ transform: "translateZ(30px)" }}>
+                      <GraduationCap className="h-6 w-6 text-primary" />
+                    </div>
+                    <div style={{ transform: "translateZ(20px)" }}>
+                      <h3 className="font-semibold mb-1">Teachers</h3>
+                      <p className="text-muted-foreground text-sm">Post announcements, upload report cards, and create AI-powered lesson plans.</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Teachers</h3>
-                    <p className="text-muted-foreground text-sm">Post announcements, upload report cards, and create AI-powered lesson plans.</p>
+                </Tilt3D>
+                <Tilt3D className="rounded-xl">
+                  <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow" style={{ transform: "translateZ(30px)" }}>
+                      <Users className="h-6 w-6 text-primary" />
+                    </div>
+                    <div style={{ transform: "translateZ(20px)" }}>
+                      <h3 className="font-semibold mb-1">Parents</h3>
+                      <p className="text-muted-foreground text-sm">Stay informed with school updates, view report cards, and track your child's progress.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow">
-                    <Users className="h-6 w-6 text-primary" />
+                </Tilt3D>
+                <Tilt3D className="rounded-xl">
+                  <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow" style={{ transform: "translateZ(30px)" }}>
+                      <Shield className="h-6 w-6 text-primary" />
+                    </div>
+                    <div style={{ transform: "translateZ(20px)" }}>
+                      <h3 className="font-semibold mb-1">Administration</h3>
+                      <p className="text-muted-foreground text-sm">Manage users, classes, and oversee all school activities in one place.</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Parents</h3>
-                    <p className="text-muted-foreground text-sm">Stay informed with school updates, view report cards, and track your child's progress.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 p-4 rounded-xl glass-3d card-3d">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 depth-shadow">
-                    <Shield className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Administration</h3>
-                    <p className="text-muted-foreground text-sm">Manage users, classes, and oversee all school activities in one place.</p>
-                  </div>
-                </div>
+                </Tilt3D>
               </div>
             </div>
             <div className="hidden md:flex justify-center">
