@@ -4,6 +4,8 @@ import { GraduationCap, Users, Shield, Image, Menu, X } from "lucide-react";
 import { useState } from "react";
 import mtssLogo from "@/assets/mtss-logo.png";
 import { Tilt3D } from "@/components/Tilt3D";
+import { lazy, Suspense } from "react";
+const Hero3DScene = lazy(() => import("@/components/Hero3DScene"));
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
