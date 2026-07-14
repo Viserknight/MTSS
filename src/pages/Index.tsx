@@ -77,7 +77,12 @@ const Index = () => {
           <div className="absolute bottom-20 right-10 w-48 h-48 rounded-full bg-accent/10 blur-3xl floating" style={{ animationDelay: "1s" }} />
           <div className="absolute top-1/2 left-1/4 w-24 h-24 rounded-full bg-primary/5 blur-2xl floating" style={{ animationDelay: "2s" }} />
         </div>
-        
+
+        {/* Real WebGL 3D scene */}
+        <Suspense fallback={null}>
+          <Hero3DScene />
+        </Suspense>
+
         <div className="container mx-auto text-center relative z-10">
           <div className="animate-fade-in">
             <img 
