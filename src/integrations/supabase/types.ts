@@ -129,29 +129,44 @@ export type Database = {
         Row: {
           created_at: string
           date_of_birth: string
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
           favorite_animal: string
           grade: string | null
           id: string
+          learner_number: string | null
+          medical_notes: string | null
           name: string
           parent_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
           date_of_birth: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           favorite_animal: string
           grade?: string | null
           id?: string
+          learner_number?: string | null
+          medical_notes?: string | null
           name: string
           parent_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
           date_of_birth?: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           favorite_animal?: string
           grade?: string | null
           id?: string
+          learner_number?: string | null
+          medical_notes?: string | null
           name?: string
           parent_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -210,6 +225,57 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      learner_lesson_progress: {
+        Row: {
+          child_id: string
+          created_at: string
+          id: string
+          lesson_plan_id: string
+          parent_notes: string | null
+          status: string
+          teacher_notes: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          id?: string
+          lesson_plan_id: string
+          parent_notes?: string | null
+          status?: string
+          teacher_notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          id?: string
+          lesson_plan_id?: string
+          parent_notes?: string | null
+          status?: string
+          teacher_notes?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learner_lesson_progress_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "learner_lesson_progress_lesson_plan_id_fkey"
+            columns: ["lesson_plan_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lesson_plans: {
         Row: {
