@@ -183,10 +183,12 @@ export const Hero3DScene = () => {
         dpr={low ? 1 : [1, 2]}
         camera={{ position: [0, 0, 6], fov: 50 }}
         gl={{ antialias: !low, alpha: true, powerPreference: low ? "low-power" : "high-performance" }}
-        frameloop={low ? "demand" : "always"}
+        frameloop="demand"
       >
+        <AdaptiveFrameLimiter start={low ? 30 : 60} min={low ? 20 : 30} max={low ? 30 : 60} />
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
+
           <directionalLight position={[5, 5, 5]} intensity={1.2} color="#ffffff" />
           <pointLight position={[-5, -3, -5]} intensity={1} color="#e11d2a" />
           {!low && <Stars radius={40} depth={30} count={600} factor={3} saturation={0} fade speed={0.6} />}
