@@ -1,7 +1,73 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Icosahedron, MeshDistortMaterial, Stars, TorusKnot, Text3D, Center } from "@react-three/drei";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import type { Group, Mesh } from "three";
+
+/**
+ * Drives the (frameloop="demand") canvas at an adaptive FPS cap.
+ * Starts at `start` fps and measures real render cost: if frames are slow it
+ * steps the cap down (frame skipping), if there's headroom it steps back up.
+ */
+function AdaptiveFrameLimiter({ start = 60, min = 24, max = 60 }: { start?: number; min?: number; max?: number }) {
+  const invalidate = useThree((s) => s.invalidate);
+  const targetRef = useRef(start);
+  const costRef = useRef(1000 / start);
+
+  // Measure how long each rendered frame actually takes.
+  useFrame(() => {
+    const now = performance.now();
+    const prev = (AdaptiveFrameLimiter as any)._t ?? now;
+    (AdaptiveFrameLimiter as any)._t = now;
+    const dt = now - prev;
+    if (dt > 0 && dt < 500) costRef.current = costRef.current * 0.9 + dt * 0.1;
+  });
+
+  useEffect(() => {
+    let raf = 0;
+    let last = performance.now();
+    let acc = 0;
+    let tick = 0;
+
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      if (document.hidden) return;
+
+      const now = performance.now();
+      const elapsed = now - last;
+      const interval = 1000 / targetRef.current;
+      if (elapsed < interval) return; // skip this frame
+      last = now - (elapsed % interval);
+      invalidate();
+
+      // Re-evaluate the cap roughly twice a second.
+      acc += elapsed;
+      if (++tick >= 12) {
+        tick = 0;
+        acc = 0;
+        const measuredFps = 1000 / Math.max(costRef.current, 1);
+        const target = targetRef.current;
+        if (measuredFps < target * 0.8) {
+          targetRef.current = Math.max(min, Math.round(target - 6));
+        } else if (measuredFps > target * 0.95 && target < max) {
+          targetRef.current = Math.min(max, Math.round(target + 3));
+        }
+      }
+    };
+
+    raf = requestAnimationFrame(loop);
+    const onVisible = () => {
+      last = performance.now();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [invalidate, min, max]);
+
+  return null;
+}
+
 
 function useIsLowPower() {
   const [low, setLow] = useState(false);
@@ -117,10 +183,12 @@ export const Hero3DScene = () => {
         dpr={low ? 1 : [1, 2]}
         camera={{ position: [0, 0, 6], fov: 50 }}
         gl={{ antialias: !low, alpha: true, powerPreference: low ? "low-power" : "high-performance" }}
-        frameloop={low ? "demand" : "always"}
+        frameloop="demand"
       >
+        <AdaptiveFrameLimiter start={low ? 30 : 60} min={low ? 20 : 30} max={low ? 30 : 60} />
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
+
           <directionalLight position={[5, 5, 5]} intensity={1.2} color="#ffffff" />
           <pointLight position={[-5, -3, -5]} intensity={1} color="#e11d2a" />
           {!low && <Stars radius={40} depth={30} count={600} factor={3} saturation={0} fade speed={0.6} />}
