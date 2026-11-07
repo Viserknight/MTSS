@@ -223,7 +223,11 @@ export default function ParentLearners() {
   }, [plans, progress]);
 
   return (
-    <DashboardLayout title="My Learners" description="View and update your learner's details and lesson plan progress">
+    <DashboardLayout>
+      <div className="mb-6">
+        <h1 className="font-heading text-3xl font-bold">My Learners</h1>
+        <p className="text-muted-foreground">View and update your learner's details and lesson plan progress.</p>
+      </div>
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
