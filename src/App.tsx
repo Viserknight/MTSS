@@ -31,6 +31,7 @@ import TeacherMessages from "./pages/teacher/Messages";
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentAnnouncements from "./pages/parent/ParentAnnouncements";
 import ParentFeed from "./pages/parent/ParentFeed";
+import ParentLearners from "./pages/parent/ParentLearners";
 import ParentReportCards from "./pages/parent/ParentReportCards";
 import ParentTimetable from "./pages/parent/ParentTimetable";
 import ParentAttendance from "./pages/parent/ParentAttendance";
@@ -156,6 +157,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["parent", "admin"]}>
                   <ParentDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/parent/learners"
+              element={
+                <ProtectedRoute allowedRoles={["parent", "admin"]}>
+                  <ParentLearners />
                 </ProtectedRoute>
               }
             />
