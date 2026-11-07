@@ -277,6 +277,36 @@ export type Database = {
           },
         ]
       }
+      lesson_plan_formats: {
+        Row: {
+          created_at: string
+          created_by: string
+          format_text: string
+          id: string
+          is_active: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          format_text: string
+          id?: string
+          is_active?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          format_text?: string
+          id?: string
+          is_active?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lesson_plans: {
         Row: {
           content: string
