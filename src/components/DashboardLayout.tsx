@@ -48,6 +48,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     ],
     parent: [
       { to: "/parent", icon: LayoutDashboard, label: "Dashboard" },
+      { to: "/parent/learners", icon: Users, label: "My Learners" },
       { to: "/parent/feed", icon: FileText, label: "School Feed" },
       { to: "/parent/timetable", icon: Calendar, label: "Timetable" },
       { to: "/parent/attendance", icon: CheckSquare, label: "Attendance" },
